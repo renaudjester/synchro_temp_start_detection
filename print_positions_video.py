@@ -37,8 +37,8 @@ def display_positions(video, start_time, positions, save_path, start_side_vid, o
             break
         else:
             # transformation of the frame
-            for i in range(len(positions)):
-                x = positions[i][compt][1]
+            for lane in positions.keys():
+                x = positions[lane][compt]
                 if x != -1:
                     # check were should the line be on x axis
                     if start_side_vid == 'right':
@@ -47,9 +47,9 @@ def display_positions(video, start_time, positions, save_path, start_side_vid, o
                         x = int(x * frame.shape[1] / 50)
                     # check were should the line be on y axis
                     if one_is_up == "true":
-                        y = int(frame.shape[0]*i/8)
+                        y = int(frame.shape[0]*(lane - 1)/8)
                     else:
-                        y = int(frame.shape[0]*(7 - i)/8)
+                        y = int(frame.shape[0]*(8 - lane)/8)
 
                     h = int(frame.shape[0]/8)
                     width_line = 10
@@ -81,12 +81,14 @@ if __name__ == "__main__":
     start_time = json_course['videos'][index_vid]['start_moment']
     start_side = json_course['videos'][index_vid]['start_side']
     one_is_up = json_course['videos'][index_vid]['one_is_up']
+
+    # formatting the data
     data = pd.read_csv(args.csv)  # id, frame_number, swimmer, x1, x2, y1, y2, event, cycles
-    data = data.to_numpy()
-    all_swimmers = [[] for i in range(8)]
-    for i in range(8):
-        all_swimmers[i] = np.squeeze(data[np.argwhere(data[:, 2] == i)])[:, (1, 3)]
-    all_swimmers = np.array(all_swimmers)
+    all_swimmers = {}
+    for i in pd.unique(data['swimmer']):
+        swimmer = data.loc[data['swimmer'] == i]
+        all_swimmers[i] = swimmer['xd'].to_numpy()
+
     display_positions(args.video, start_time, all_swimmers, args.out, start_side, one_is_up)
 
     # information of the video in the json

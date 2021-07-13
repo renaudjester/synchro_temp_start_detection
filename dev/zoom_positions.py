@@ -189,3 +189,32 @@ if __name__ == '__main__':
     points = np.float32([[[x, y]]])
     detransformed = cv2.perspectiveTransform(points, new_hm)
     print(np.squeeze(detransformed), np.squeeze(detransformed).astype(int))
+
+    # Old data handling code for manual data:
+    # elif args.type_data == 'manuel':
+    #     data = pd.read_csv(args.csv) # col : time	id	x	y	swimmer	events	distance
+    #     name_of_video_to_get_info_above = args.json.split('/')[-1].split('.')[0] + '_from_above.mp4'
+    #     index_vid_above = get_index(json_course['videos'], name_of_video_to_get_info_above)
+    #     start_time_above = json_course['videos'][index_vid_above]['start_moment']
+    #     data['frame_number'] = ((data['time'] - start_time_above + 1) * fps).astype(int)
+    #     # data['distance'] = data['distance'] / 200 * 50
+    #     data = data.to_numpy() # col: time, id, x, y, swimmer, events, distance, frame_number
+    #     all_swimmers = {}
+    #     for i in range(9): # todo do the loop for all swimmers
+    #         if i == 0:
+    #             continue
+    #         swimmer = np.squeeze(data[np.argwhere(data[:, 1] == i)])[:, (7, 3, 6)]
+    #         to_interpolate = pd.DataFrame(swimmer, columns=['frame_number', 'y', 'x'])
+    #         to_interpolate['y'] = to_interpolate['y'].astype(float)
+    #         to_interpolate['x'] = to_interpolate['x'].astype(float)
+    #
+    #         to_interpolate.set_index('frame_number', inplace=True)
+    #         to_interpolate = to_interpolate.reindex(range(0, max(to_interpolate.index) + 1))
+    #         to_interpolate.loc[0] = 0
+    #         # print(swimmer)
+    #         data_to_print = to_interpolate[['y', 'x']].interpolate(method='index')
+    #         # data_to_print['y'] = data_to_print['y'].astype(int)
+    #         # data_to_print['x'] = data_to_print['x'].astype(int)
+    #         data_to_print = data_to_print.to_numpy()
+    #         all_swimmers[i] = data_to_print
+    #     # all_swimmers = np.array(all_swimmers)

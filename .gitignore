@@ -64,6 +64,8 @@ videos/
 wav/
 resultats/
 test_two_lanes/
+test/
+backup/
 *.zip
 
 #checkpoints of jupyter
