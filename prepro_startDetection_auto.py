@@ -56,10 +56,14 @@ def extract_time_start(video_path, bip_ref_path="ref_bip_isolated.wav", referenc
         if median_time - aberration <= temps_possible[i]:
             if temps_possible[i] <= median_time + aberration :
                 temps_possible_non_aberrant.append(temps_possible[i])
-                         
-    # 0.11s de silence avant le bip dans les sons de références
-    start = np.median(temps_possible_non_aberrant) + 0.11
-
+    
+    if temps_possible_non_aberrant != []:
+        # 0.11s de silence avant le bip dans les sons de références
+        start = np.median(temps_possible_non_aberrant) + 0.11
+    
+    else :
+    # Erreur
+        start = -1
     return start
 
 
